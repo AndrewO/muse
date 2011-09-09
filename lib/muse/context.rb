@@ -2,7 +2,9 @@ module Muse
   class Context
     attr_accessor :suite, :test, :test_libraries
     attr_reader :lines
-    def initialize
+    def initialize(options = {})
+      @suite = options.delete(:suite)
+      @test = options.delete(:test)
       @lines = []
       @test_libraries = guess_test_libraries
     end

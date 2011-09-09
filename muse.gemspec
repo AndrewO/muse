@@ -22,6 +22,8 @@ Gem::Specification.new do |s|
   # s.add_development_dependency "rspec"
   
   s.add_runtime_dependency "pry"
+  # Pry uses this, but so to we.
+  s.add_runtime_dependency "slop"
   s.add_runtime_dependency "clipboard"
   s.add_runtime_dependency "activesupport"
   s.add_runtime_dependency "i18n"

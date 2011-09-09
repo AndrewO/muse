@@ -68,8 +68,6 @@ h2. TODOs
 * TestUnit support
 * ActiveSupport::TestCase support
 * Rspec support
-* Cleanup repl.rb
 * Make a real gem
-* Commandline switches to set the suite, test, and test libs
 * Allow setup and assert to take one-liners
 * Smarter determination of test libraries

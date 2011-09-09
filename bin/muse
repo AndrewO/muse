@@ -1,5 +1,11 @@
 #!/usr/bin/env ruby
 
 require 'muse'
+require 'slop'
 
-Muse::Repl.start
+opts = Slop.parse do
+  on :s, :suite, "Set the initial suite", :optional => true
+  on :t, :test, "Set the initial test", :optional => true
+end
+
+Muse::Repl.start(opts)

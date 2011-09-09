@@ -4,8 +4,8 @@ module Muse
   class Repl < Pry
     include Prompt
 
-    def self.start
-      super(Muse::Context.new)
+    def self.start(options = {})
+      super(Muse::Context.new(options.to_hash))
     end
 
     attr_reader :muse_context
