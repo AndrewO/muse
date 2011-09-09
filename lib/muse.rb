@@ -1,7 +1,10 @@
 require "muse/version"
 
 require "pry"
-# require "clipboard"
+require "clipboard"
+# Required for active_support strings
+require "i18n"
+require "active_support/core_ext/string"
 
 require "muse/repl"
 require "muse/context"

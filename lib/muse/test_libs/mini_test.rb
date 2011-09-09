@@ -14,17 +14,22 @@ module Muse
       end
       
       def file_path
-        "#{@context.suite.underscore}_test.rb"
+        "test_#{@context.suite.underscore.gsub(" ", "_")}.rb"
       end
       
-      def test
+      def suite
         preamble +
-        
+        "\n" +
         suite_definition + "\n" +
-          test_definition(2) + "\n" +
-            lines(4) + "\n" +
-          " " * 2 + "end" + "\n" +
+          test(2) +
         "end" + "\n"
+        
+      end
+      
+      def test(indent = 0)
+        test_definition(indent) + "\n" +
+          lines(indent + 2) + "\n" +
+        " " * (indent) + "end" + "\n"
       end
       
       def preamble
@@ -32,11 +37,19 @@ module Muse
       end
       
       def suite_definition
-        %{class Test#{@context.suite || "<Name>"} < MiniTest::Test::TestCase}
+        %{class #{suite_name || "Test<Name>"} < MiniTest::Unit::TestCase}
+      end
+      
+      def suite_name
+        "Test#{@context.suite.camelize}" if @context.suite
       end
       
       def test_definition(indent = 0)
-        " " * indent + %{test_#{@context.test || "<name>"}}
+        " " * indent + "def #{(test_name || "test_<name>")}"
+      end
+      
+      def test_name
+        "test_#{@context.test.underscore.gsub(" ", "_")}" if @context.test
       end
       
       def lines(indent = 0)
