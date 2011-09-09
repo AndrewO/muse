@@ -1,0 +1,75 @@
+h1. Muse
+
+h2. Interactive Test-Later Development
+
+If you're reading this, you probably know about "TDD", "BDD", "TATFT":http://smartic.us/2008/08/15/tatft-i-feel-a-revolution-coming-on/... "ZDD":http://imgur.com/Lutjw. All developers always test their code, right?
+
+Well, sometimes—for whatever reason—there's Ruby code out there that's untested. That's where Muse comes in. You have code that works (for some definition or "works") and you want to get your test suite to reflect that before you start changing other things around.
+
+Maybe you're working on a brownfield project that a lesser developer started. (Maybe that lesser developer is an earlier you...)
+
+Maybe this was a toy that you were experimenting with and you didn't even know how to even start testing it... like this very project.
+
+Maybe you're "some kind of weirdo that's used to developing interactively":http://c2.com/cgi/wiki?SmugSmalltalkWeenie and you like that kind of thing.
+
+Muse doesn't care! Muse loves you for who you are. Muse just wants to inspire better tests!
+
+h2. Usage
+
+Muse keeps a context with a _suite_, _test_, and _setup_ and _assertion_ lines. (These terms may change, but as a goal is to be able to generate tests in multiple test_libraries, terms were chosen that don't exactly line up with any one library.) Here's a chart of how they match up to test libraries (currently only MiniTest is fully supported):
+
+|_. Muse |_. MiniTest |_. MiniTest::Spec |_. Wrong |
+|_. suite| test case class | "description" block | NA |
+|_. test | test case method | "it" block | NA |
+|_. setup| lines without assertions | lines without assertions | lines without assertions |
+|_. assert| lines with assert_equals | lines with assert_equals| lines with assert { } |
+
+h3. Example Session
+
+<pre><code>
+#  Start a session (TODO: allow starting from gem):
+⎈  bundle exec bin/muse 
+# Set the suite (in this case we're writing tests for Muse's Context class):
+(suite):(test) :) suite Context
+# Set the test:
+Context:(test) :) test has lines
+# Write some setup lines:
+Context:has lines :) setup
+Context:has lines *setup* :) context = Muse::Context.new
+=> #<Muse::Context:0x000001009f8520
+ @lines=[],
+ @test_libraries=[:mini_test, :wrong]>
+Context:has lines *setup* :) exit
+# Write some assertions:
+Context:has lines :) assert
+Context:has lines *assert* :) context.lines
+=> []
+Context:has lines *assert* :) exit
+# Show the test
+Context:has lines :) show-test
+def test_has_lines
+  context = Muse::Context.new
+  assert { context.lines == [] }
+end
+# See (or set) the test-libs. Currently limited to these.
+Context:has lines :) test-libs
+mini_test
+wrong
+# Copy the test to the clipboard and open the test file in your editor.
+Context:has lines :) edit-test
+Using test file at /Users/andrew/Play/muse/test/test_context.rb
+Copying test to clipboard.
+</code></pre>
+
+h2. TODOs
+
+* MiniTest::Spec support
+* Use Muse to write its own test suite because I like being meta.
+* TestUnit support
+* ActiveSupport::TestCase support
+* Rspec support
+* Cleanup repl.rb
+* Make a real gem
+* Commandline switches to set the suite, test, and test libs
+* Allow setup and assert to take one-liners
+* Smarter determination of test libraries
