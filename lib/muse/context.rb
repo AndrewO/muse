@@ -29,7 +29,7 @@ module Muse
     
     def guess_test_libraries
       # TODO: inspect working directory to determine test library
-      [:mini_test, :wrong]
+      [:mini_test_spec, :wrong]
     end
     
     def format
