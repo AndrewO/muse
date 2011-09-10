@@ -1,70 +1,48 @@
 module Muse
   module TestLibs
     module MiniTest
-      def path
-        if @out.kind_of?(File)
-          @out.path
-        else
-          File.join(Dir.pwd, test_dir, file_path)
-        end
+      def self.in_use?
+        Object.const_defined?(:MiniTest) && !MiniTest.const_defined?(:Spec)
       end
       
-      def test_dir
-        "test"
-      end
-      
-      def file_path
-        "test_#{@context.suite.underscore.gsub(" ", "_")}.rb"
-      end
-      
-      def suite
-        preamble +
-        "\n" +
-        suite_definition + "\n" +
-          test(2) +
-        "end" + "\n"
-        
-      end
-      
-      def test(indent = 0)
-        test_definition(indent) + "\n" +
-          lines(indent + 2) + "\n" +
-        " " * (indent) + "end" + "\n"
-      end
-      
-      def preamble
-        %{require 'test_helper'\n}
-      end
-      
-      def suite_definition
-        %{class #{suite_name || "Test<Name>"} < MiniTest::Unit::TestCase}
-      end
-      
+      # Suite naming and retrieval
       def suite_name
         "Test#{@context.suite.camelize}" if @context.suite
       end
-      
-      def test_definition(indent = 0)
-        " " * indent + "def #{(test_name || "test_<name>")}"
+
+      def suite_class
+        suite_name.constantize
       end
-      
+
       def test_name
         "test_#{@context.test.underscore.gsub(" ", "_")}" if @context.test
       end
-      
-      def lines(indent = 0)
-        @context.lines.map do |line| 
-          " " * indent + case line
-          when InputLine
-            input_line(line)
-          when AssertionLine
-            assertion_line(line)
-          end
-        end.join("\n")
+
+      def test_method
+        klass.instance_method(test_name) if klass = suite_class
       end
-      
-      def input_line(line)
-        line.line.strip
+
+      # Path management
+      def test_dir
+        "test"
+      end
+
+      def file_name
+        "test_#{@context.suite.gsub("::", "_").underscore.gsub(" ", "_")}.rb"
+      end
+
+      # Suite formatting
+      def preamble
+        %{require 'test_helper'\n\n}
+      end
+
+      # Test formatting
+      def suite_definition
+        %{class #{suite_name || "Test<Name>"} < MiniTest::Unit::TestCase}
+      end
+
+      def test_definition(indent = 0)
+        " " * indent + "def #{(test_name || "test_<name>")}"
       end
 
       def assertion_line(line)

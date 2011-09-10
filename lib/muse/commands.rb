@@ -24,9 +24,13 @@ module Muse
       end
     end
 
-    command "load-test-env", "Loads the test env by eval'ing the formatter's preamble" do
-      test_dir = target.eval("self").format.test_dir
-      preamble = target.eval("self").format.preamble
+    command "load-test-env", "Loads the test env by eval'ing the test_file's preamble" do
+      context = target.eval("self")
+      test_file = Muse::TestFile.new(context)
+
+      test_dir = test_file.test_dir
+      preamble = test_file.preamble
+
       # Add test dir to load path
       target.eval(%{$:.unshift(File.join(Dir.pwd, "#{test_dir}"))})
       # Eval the preamble that will be at the head of every test file
@@ -48,36 +52,37 @@ module Muse
     end
 
     command "show-test", "Shows the current test" do
-      output.puts target.eval("self").format.test
+      context = target.eval("self")
+      output.puts Muse::TestFile.new(context).test
     end
     
     command "edit-test", "Opens the subject test in the editor and pastes in the current context." do
       context = target.eval("self")
-      formatter = context.format
+      test_file = Muse::TestFile.new(context)
       
-      if formatter.suite_name && formatter.test_name
+      if test_file.suite_name && test_file.test_name
         # TODO: make it not run everytime
         run "load-test-env"
 
-        if File.exists?(formatter.path)
-          output.puts "Using test file at #{formatter.path}"
-          target.eval(%{load "#{formatter.path}"})
+        if File.exists?(test_file.path)
+          output.puts "Using test file at #{test_file.path}"
+          target.eval(%{load "#{test_file.path}"})
           output.puts "Copying test to clipboard."
-          Clipboard.copy(formatter.test(2))
+          Clipboard.copy(test_file.test(2))
           
-          if Object.const_get(formatter.suite_name).respond_to?(formatter.test_name)
-            run "edit-method", "#{formatter.suite_name}##{formatter.test_name}"
+          if test_file.suite_class && test_file.suite_class.respond_to?(test_file.test_name)
+            run "edit-method", "#{test_file.suite_class.to_s}##{test_file.test_name}"
           else
-            run "edit", "-r", formatter.path
+            run "edit", "-r", test_file.path
           end
         else
-          output.puts "Creating test file at #{formatter.path}"
-          FileUtils.touch(formatter.path)
+          output.puts "Creating test file at #{test_file.path}"
+          FileUtils.touch(test_file.path)
           
           output.puts "Copying suite to clipboard."
-          Clipboard.copy(formatter.suite)
+          Clipboard.copy(test_file.suite)
           
-          run "edit", "-r", formatter.path
+          run "edit", "-r", test_file.path
         end
       else
         ouput.puts "Unable to determine a suite and test name for your test setup."

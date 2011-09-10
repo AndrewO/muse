@@ -10,7 +10,7 @@ require "muse/prompt"
 require "muse/commands"
 require "muse/repl"
 require "muse/context"
-require "muse/formatter"
+require "muse/test_file"
 require "muse/test_libs"
 
 module Muse

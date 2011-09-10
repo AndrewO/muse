@@ -27,4 +27,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "clipboard"
   s.add_runtime_dependency "activesupport"
   s.add_runtime_dependency "i18n"
+  
+  # Should probably think about extracting test libs into plugins
+  # MiniTest::Spec.children was added in 2.1, which is after the version distributed with Ruby 1.9
+  s.add_runtime_dependency "minitest", ">= 2.1.0"
 end

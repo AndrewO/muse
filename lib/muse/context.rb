@@ -35,15 +35,7 @@ module Muse
     
     def guess_test_libraries
       # TODO: inspect working directory to determine test library
-      [:mini_test, :wrong]
-    end
-    
-    def format
-      formatter = Muse::Formatter.new(self)
-      test_libraries.each do |lib|
-        formatter.extend Muse::TestLibs[lib]
-      end
-      formatter
+      [:mini_test_spec, :wrong]
     end
   end
 
