@@ -72,3 +72,12 @@ h2. TODOs
 * Allow setup and assert to take one-liners
 * Smarter determination of test libraries
 * COLORS!
+* Don't add lines with errors to the context. Also make it possible to pop off the last line.
+* Probably need to clean up bindings between tests
+* Oh man, what would be really cool would be if we didn't just generate tests a strings of text, but actually ran within the test lib's runner so we could take advantage of setup methods, nesting, convenience methods...
+* Some problems with quoting on assertion outputters
+
+h2. Some cool stuff
+
+* Muse is based on Pry which gives us some amazing functionality on its own: you can dig into objects, list their instance variables, do tab completion on their methods, and so much more.
+* Use a continuous testing tool. I use infinity_test, but there a bunch out there (e.g. autotest). See the .infinity_test configuration in this project for a usage example.
