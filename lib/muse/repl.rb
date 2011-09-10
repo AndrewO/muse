@@ -5,6 +5,12 @@ module Muse
     include Prompt
 
     def self.start(options = {})
+      Pry.config.history.file = File.join(Dir.pwd, ".muse_history")
+      Pry.config.history.should_save = true
+      Pry.config.history.should_load = true
+      # Not sure why I have to call load_history.
+      Pry.load_history
+
       super(Muse::Context.new(options.to_hash))
     end
 

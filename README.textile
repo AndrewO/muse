@@ -71,3 +71,4 @@ h2. TODOs
 * Make a real gem
 * Allow setup and assert to take one-liners
 * Smarter determination of test libraries
+* COLORS!
