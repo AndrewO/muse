@@ -1,0 +1,17 @@
+infinity_test do
+  use :rubies => %w(1.9.2)
+  
+  notifications :growl do
+    show_images :mode => :fuuu
+  end
+  
+  before_run do
+    clear :terminal
+  end
+
+  heuristics do
+    add('^test\/test_.*\.rb') do |file|
+      run file
+    end
+  end
+end
