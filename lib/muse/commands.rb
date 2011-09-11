@@ -25,6 +25,7 @@ module Muse
     end
 
     command "load-test-env", "Loads the test env by eval'ing the test_file's preamble" do
+      target.eval("$MUSE_SAYS_NOT_TO_AUTORUN = true")
       context = target.eval("self")
       test_file = Muse::TestFile.new(context)
 
